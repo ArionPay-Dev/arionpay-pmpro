@@ -3,7 +3,7 @@
  * Plugin Name:       ArionPay for Paid Memberships Pro
  * Plugin URI:        https://arionpay.com
  * Description:       Accept Bitcoin, USDT, Litecoin, Ethereum, TRON and more for memberships in Paid Memberships Pro. The money goes straight to your own wallet.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            ArionPay
@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'ARIONPAY_PMPRO_VERSION', '1.0.0' );
+define( 'ARIONPAY_PMPRO_VERSION', '1.0.1' );
 define( 'ARIONPAY_PMPRO_FILE', __FILE__ );
 
 add_action( 'plugins_loaded', 'arionpay_pmpro_load', 20 );

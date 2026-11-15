@@ -388,11 +388,20 @@ class PMProGateway_arionpay extends PMProGateway {
 		if ( ! empty( $invoice['asset'] ) ) {
 			$parts[] = trim( ( isset( $invoice['paidCrypto'] ) ? $invoice['paidCrypto'] . ' ' : '' ) . $invoice['asset'] . ( ! empty( $invoice['network'] ) ? ' on ' . $invoice['network'] : '' ) );
 		}
+		// Each payment of the invoice names its blockchain transaction in `txid` (1.0.0 read `txHash`, which only exists
+		// on the invoice itself as the last transaction, so the id never reached the note).
 		$hashes = array();
 		foreach ( isset( $invoice['transactions'] ) && is_array( $invoice['transactions'] ) ? $invoice['transactions'] : array() as $tx ) {
-			if ( is_array( $tx ) && ! empty( $tx['txHash'] ) ) {
-				$hashes[] = (string) $tx['txHash'];
+			if ( ! is_array( $tx ) ) {
+				continue;
 			}
+			$id = ! empty( $tx['txid'] ) ? $tx['txid'] : ( ! empty( $tx['txHash'] ) ? $tx['txHash'] : '' );
+			if ( '' !== $id && ! in_array( (string) $id, $hashes, true ) ) {
+				$hashes[] = (string) $id;
+			}
+		}
+		if ( ! $hashes && ! empty( $invoice['txHash'] ) ) {
+			$hashes[] = (string) $invoice['txHash'];
 		}
 		if ( $hashes ) {
 			$parts[] = 'tx ' . implode( ', ', array_slice( $hashes, 0, 5 ) );
